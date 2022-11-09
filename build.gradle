@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.7.RELEASE'
+		springBootVersion = '2.7.4'
 	}
 
 	repositories {
@@ -16,48 +16,51 @@ buildscript {
 	}
 }
 
+plugins {
+	id "io.freefair.lombok" version "6.5.1"
+}
+
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
 
-project.version = System.properties['buildNumber'] ?: 'dev'
-
-repositories {
-	mavenCentral()
-	maven {
-		url 'https://artifacts.elastic.co/maven'
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
-configurations {
-	testRuntime.exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+repositories {
+	mavenCentral()
+}
+
+test {
+	useJUnitPlatform()
 }
 
 dependencies {
-	compileOnly "org.projectlombok:lombok:1.16.14"
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	compile 'org.springframework.boot:spring-boot-starter-web'
-	compile 'org.springframework.boot:spring-boot-starter-actuator'
-	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.axonframework:axon-spring-boot-starter:4.6.1'
+	implementation 'dom4j:dom4j:1.6.1'
 
-	compile 'org.axonframework:axon-spring-boot-starter:3.1'
-	compile 'dom4j:dom4j:1.6.1'
+	implementation 'nl.garvelink.oss:iban:1.13.0'
 
-	compile 'com.google.code.gson:gson:2.8.0'
+	implementation 'com.google.code.gson:gson:2.10'
 
-	compile 'org.springframework.boot:spring-boot-starter-jdbc'
-	compile 'org.flywaydb:flyway-core:4.0.3'
-	runtime 'org.postgresql:postgresql:9.4.1212'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.flywaydb:flyway-core:9.7.0'
+	runtimeOnly 'org.postgresql:postgresql:42.5.0'
 
-	compile 'org.elasticsearch:elasticsearch:5.6.0'
-	compile 'org.elasticsearch.client:transport:5.6.0'
+	runtimeOnly 'org.apache.logging.log4j:log4j-to-slf4j:2.19.0'
 
-	runtime 'org.apache.logging.log4j:log4j-to-slf4j:2.8'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
 
-	compile 'org.apache.commons:commons-lang3:3.5'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.axonframework:axon-test:4.6.1'
 
-	testCompile 'org.springframework.boot:spring-boot-starter-test'
-	testCompile 'org.axonframework:axon-test:3.1'
-	testCompile "org.projectlombok:lombok:1.16.14"
-
-	testRuntime 'org.apache.logging.log4j:log4j-api:2.8.1'
-	testRuntime 'org.apache.logging.log4j:log4j-core:2.8.1'
+	testRuntimeOnly 'org.apache.logging.log4j:log4j-api:2.19.0'
+	testRuntimeOnly 'org.apache.logging.log4j:log4j-core:2.19.0'
 }

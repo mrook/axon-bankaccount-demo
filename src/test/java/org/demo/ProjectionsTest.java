@@ -1,51 +1,43 @@
 package org.demo;
 
-import org.axonframework.eventhandling.EventBus;
-import org.axonframework.eventhandling.GenericEventMessage;
-import org.axonframework.eventhandling.SimpleEventBus;
-import org.axonframework.eventhandling.SimpleEventHandlerInvoker;
-import org.axonframework.eventhandling.SubscribingEventProcessor;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.axonframework.eventhandling.*;
+import org.demo.configuration.TestProjectionsConfiguration;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.demo.configuration.TestProjectionsConfiguration;
-import org.demo.shared.Indices;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Arrays;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestProjectionsConfiguration.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ProjectionsTest<P> {
 	protected P projections;
-
-	@Autowired
-	private Indices indices;
 
 	private EventBus eventBus;
 
 	private SubscribingEventProcessor eventProcessor;
 
-	@Before
+	@BeforeEach
 	public void createEventBus() {
-		eventBus = new SimpleEventBus();
+		eventBus = SimpleEventBus.builder().build();
 
-		eventProcessor = new SubscribingEventProcessor("listener", new SimpleEventHandlerInvoker(projections), eventBus);
+		eventProcessor = SubscribingEventProcessor.builder().name("listener")
+				.eventHandlerInvoker(SimpleEventHandlerInvoker.builder().eventHandlers(projections).build())
+				.messageSource(eventBus)
+				.build();
 
 		eventProcessor.start();
 	}
 
-	@Before
-	public void clearIndex() {
-		indices.deleteFrom(getIndex());
-	}
-
-	@After
+	@AfterEach
 	public void stopEventListener() {
 		eventProcessor.shutDown();
 	}
@@ -54,8 +46,6 @@ public abstract class ProjectionsTest<P> {
 	public void setProjections(P projections) {
 		this.projections = projections;
 	}
-
-	protected abstract String getIndex();
 
 	protected void publish(Object... events) {
 		publishAt(null, events);
@@ -79,11 +69,6 @@ public abstract class ProjectionsTest<P> {
 
 	protected void publishAndRefreshAt(Instant instant, Object... events) {
 		publishAt(instant, events);
-
-		refreshIndex();
 	}
 
-	private void refreshIndex() {
-		indices.refresh(getIndex());
-	}
 }
