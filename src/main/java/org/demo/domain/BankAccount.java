@@ -3,10 +3,12 @@ package org.demo.domain;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.GenericEventMessage;
+import org.axonframework.modelling.command.AggregateCreationPolicy;
 import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.command.CreationPolicy;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -18,7 +20,11 @@ public class BankAccount {
 	private BigDecimal balance;
 
 	@CommandHandler
-	public BankAccount(OpenAccount command) {
+	@CreationPolicy(AggregateCreationPolicy.CREATE_IF_MISSING)
+	public void openAccount(OpenAccount command) throws AccountAlreadyOpenedException {
+		if (accountId != null) {
+			throw new AccountAlreadyOpenedException(accountId);
+		}
 		apply(new AccountOpened(command.accountId(), command.accountNumber()));
 	}
 
@@ -34,7 +40,7 @@ public class BankAccount {
 		apply(new MoneyDeposited(
 				command.accountId(),
 				command.amount(),
-				ZonedDateTime.now()));
+				GenericEventMessage.clock.instant()));
 	}
 
 	@EventHandler
@@ -48,7 +54,7 @@ public class BankAccount {
 			apply(new MoneyWithdrawn(
 					command.accountId(),
 					command.amount(),
-					ZonedDateTime.now()));
+					GenericEventMessage.clock.instant()));
 		} else {
 			throw new OverdraftDetectedException(accountNumber, balance, command.amount());
 		}
