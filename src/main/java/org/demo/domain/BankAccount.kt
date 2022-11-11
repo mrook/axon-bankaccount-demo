@@ -1,6 +1,5 @@
 package org.demo.domain
 
-import lombok.NoArgsConstructor
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.eventhandling.GenericEventMessage
@@ -10,7 +9,6 @@ import org.axonframework.modelling.command.AggregateLifecycle.apply
 import org.axonframework.modelling.command.CreationPolicy
 import java.math.BigDecimal
 
-@NoArgsConstructor
 class BankAccount {
 	@AggregateIdentifier
 	private var accountId: String? = null

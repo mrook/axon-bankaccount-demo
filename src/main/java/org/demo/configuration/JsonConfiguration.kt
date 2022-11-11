@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class JsonConfiguration {
+class JsonConfiguration {
     @Bean
-	open fun gson(): Gson {
+	fun gson(): Gson {
         return GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
                 .create()

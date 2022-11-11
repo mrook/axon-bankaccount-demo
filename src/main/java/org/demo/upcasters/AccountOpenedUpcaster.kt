@@ -2,7 +2,6 @@ package org.demo.upcasters
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import lombok.Getter
 import nl.garvelink.iban.IBAN
 import org.axonframework.serialization.SerializedType
 import org.axonframework.serialization.SimpleSerializedType
@@ -10,7 +9,6 @@ import org.axonframework.serialization.upcasting.event.IntermediateEventRepresen
 import org.axonframework.serialization.upcasting.event.SingleEventUpcaster
 import org.demo.domain.AccountOpened
 
-@Getter
 class AccountOpenedUpcaster : SingleEventUpcaster() {
     private val typeConsumed: SerializedType = SimpleSerializedType(AccountOpened::class.java.typeName, "1.0")
     private val typeProduced: SerializedType = SimpleSerializedType(org.demo.domain.v2.AccountOpened::class.java.typeName, "2.0")

@@ -1,6 +1,5 @@
 package org.demo.configuration
 
-import lombok.extern.slf4j.Slf4j
 import org.axonframework.common.IdentifierFactory
 import org.axonframework.common.jdbc.ConnectionProvider
 import org.axonframework.common.jdbc.DataSourceConnectionProvider
@@ -23,11 +22,10 @@ import java.sql.SQLException
 import java.time.Duration
 import javax.sql.DataSource
 
-@Slf4j
 @Configuration
-open class EventSourcingConfiguration {
+class EventSourcingConfiguration {
     @Bean
-	open fun identifierFactory(): IdentifierFactory {
+	fun identifierFactory(): IdentifierFactory {
         return IdentifierFactory.getInstance()
     }
 

@@ -1,6 +1,5 @@
 package org.demo.api
 
-import lombok.extern.slf4j.Slf4j
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.common.IdentifierFactory
 import org.demo.projections.BankAccount
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
-@Slf4j
 class BankAccountController @Autowired constructor(
 		private val commandGateway: CommandGateway,
 		private val identifierFactory: IdentifierFactory,
