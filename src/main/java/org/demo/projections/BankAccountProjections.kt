@@ -8,6 +8,7 @@ import java.math.BigDecimal
 import java.util.*
 
 @Repository
+@RebuildableProjection(version = "1", rebuild = true)
 class BankAccountProjections {
     private val activeAccounts: MutableMap<String, BankAccount> = HashMap()
 
