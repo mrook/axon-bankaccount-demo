@@ -4,14 +4,11 @@ import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.common.IdentifierFactory
 import org.demo.domain.BankAccountEvents
 import org.demo.projections.BankAccountProjections
-import org.demo.projections.BankAccountProjectionsEvents
 import org.demo.projections.BankAccountProjectionsEvents.emptyBankAccount
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito
 import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean

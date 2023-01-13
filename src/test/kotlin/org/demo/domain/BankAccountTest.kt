@@ -1,8 +1,6 @@
 package org.demo.domain
 
 import org.axonframework.test.aggregate.AggregateTestFixture
-import org.demo.domain.BankAccountEvents.ACCOUNT_ID
-import org.demo.domain.BankAccountEvents.ACCOUNT_NUMBER
 import org.demo.domain.BankAccountEvents.DEPOSIT_AMOUNT
 import org.demo.domain.BankAccountEvents.WITHDRAW_AMOUNT
 import org.demo.domain.BankAccountEvents.WITHDRAW_DEPOSIT_INSTANT

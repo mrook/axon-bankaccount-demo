@@ -16,7 +16,6 @@ import org.axonframework.serialization.json.JacksonSerializer
 import org.axonframework.serialization.upcasting.event.EventUpcaster
 import org.axonframework.spring.messaging.unitofwork.SpringTransactionManager
 import org.demo.upcasters.AccountOpenedUpcaster
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
