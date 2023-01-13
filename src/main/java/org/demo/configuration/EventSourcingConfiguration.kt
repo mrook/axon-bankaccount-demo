@@ -1,5 +1,6 @@
 package org.demo.configuration
 
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.axonframework.common.IdentifierFactory
 import org.axonframework.common.jdbc.ConnectionProvider
 import org.axonframework.common.jdbc.DataSourceConnectionProvider
@@ -11,9 +12,11 @@ import org.axonframework.eventsourcing.eventstore.EventStorageEngine
 import org.axonframework.eventsourcing.eventstore.jdbc.EventSchema
 import org.axonframework.eventsourcing.eventstore.jdbc.JdbcEventStorageEngine
 import org.axonframework.serialization.Serializer
+import org.axonframework.serialization.json.JacksonSerializer
 import org.axonframework.serialization.upcasting.event.EventUpcaster
 import org.axonframework.spring.messaging.unitofwork.SpringTransactionManager
 import org.demo.upcasters.AccountOpenedUpcaster
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.PlatformTransactionManager
@@ -43,7 +46,7 @@ class EventSourcingConfiguration {
 
     @Bean
     @Throws(SQLException::class)
-	open fun tokenStore(dataSource: DataSource?, serializer: Serializer?): TokenStore {
+	fun tokenStore(dataSource: DataSource?, serializer: Serializer?): TokenStore {
         val connectionProvider: ConnectionProvider = DataSourceConnectionProvider(dataSource)
         return JdbcTokenStore.builder().connectionProvider(connectionProvider).serializer(serializer).schema(tokenSchema())
                 .claimTimeout(Duration.ofSeconds(10)).contentType(ByteArray::class.java).nodeId(ManagementFactory.getRuntimeMXBean().name).build()
@@ -54,13 +57,22 @@ class EventSourcingConfiguration {
     }
 
     @Bean
-	open fun eventStorageEngine(dataSource: DataSource?, platformTransactionManager: PlatformTransactionManager?): EventStorageEngine {
+	fun eventStorageEngine(dataSource: DataSource?, platformTransactionManager: PlatformTransactionManager?): EventStorageEngine {
         val connectionProvider: ConnectionProvider = DataSourceConnectionProvider(dataSource)
         val transactionManager: TransactionManager = SpringTransactionManager(platformTransactionManager)
         return JdbcEventStorageEngine.builder().upcasterChain(upcasterChain()).connectionProvider(connectionProvider)
                 .transactionManager(transactionManager).schema(eventSchema(EVENT_TABLE_VERSION))
-                .dataType(ByteArray::class.java).build()
+                .dataType(ByteArray::class.java)
+				.snapshotSerializer(eventSerializer())
+				.eventSerializer(eventSerializer())
+				.build()
     }
+
+	fun eventSerializer(): Serializer {
+		val serializer = JacksonSerializer.defaultSerializer()
+		serializer.objectMapper.registerKotlinModule()
+		return serializer
+	}
 
     companion object {
         private const val EVENT_TABLE_VERSION = 1

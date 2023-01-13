@@ -8,21 +8,25 @@ import java.math.BigDecimal
 import java.util.*
 
 @Repository
-open class BankAccountProjections {
+class BankAccountProjections {
     private val activeAccounts: MutableMap<String, BankAccount> = HashMap()
+
     @EventHandler
     fun onAccountOpened(accountOpened: AccountOpened) {
         if (findAccountById(accountOpened.accountId).isPresent) {
-            throw RuntimeException("This bank account should not be present, but it is")
+            throw ProjectionsLogicException("This bank account should not be present, but it is")
         }
-        val bankAccount = BankAccount(accountOpened.accountId, accountOpened.accountNumber, BigDecimal.ZERO)
+        val bankAccount = BankAccount(
+				accountOpened.accountId,
+				accountOpened.accountNumber,
+				BigDecimal.ZERO)
         activeAccounts[accountOpened.accountId] = bankAccount
     }
 
     @EventHandler
     fun onAccountClosed(accountClosed: AccountClosed) {
         if (findAccountById(accountClosed.accountId).isEmpty) {
-            throw RuntimeException("This bank account should be present, but it isn't")
+            throw ProjectionsLogicException("This bank account should be present, but it isn't")
         }
         activeAccounts.remove(accountClosed.accountId)
     }
@@ -30,4 +34,8 @@ open class BankAccountProjections {
     fun findAccountById(accountId: String): Optional<BankAccount> {
         return Optional.ofNullable(activeAccounts[accountId])
     }
+
+	fun getNumberOfAccounts(): Int {
+		return activeAccounts.size
+	}
 }

@@ -7,14 +7,16 @@ import org.axonframework.modelling.command.AggregateCreationPolicy
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle.apply
 import org.axonframework.modelling.command.CreationPolicy
+import org.axonframework.spring.stereotype.Aggregate
 import java.math.BigDecimal
 
-class BankAccount {
+@Aggregate
+class BankAccount() {
 	@AggregateIdentifier
-	private var accountId: String? = null
+	private lateinit var accountId: String
+	private lateinit var accountNumber: String
+	private lateinit var balance: BigDecimal
 	private var accountStatus: AccountStatus = AccountStatus.NEW
-	private var accountNumber: String? = null
-	private var balance: BigDecimal? = null
 
 	enum class AccountStatus {
 		NEW,
@@ -60,13 +62,13 @@ class BankAccount {
 
 	@EventHandler
 	fun moneyDeposited(event: MoneyDeposited) {
-		balance = balance!!.add(event.amount)
+		balance = balance.add(event.amount)
 	}
 
 	@CommandHandler
 	@Throws(OverdraftDetectedException::class)
 	fun withdrawMoney(command: WithdrawMoney) {
-		if (balance!!.compareTo(command.amount) >= 0) {
+		if (balance.compareTo(command.amount) >= 0) {
 			apply(MoneyWithdrawn(
 					command.accountId,
 					command.amount,
@@ -78,6 +80,6 @@ class BankAccount {
 
 	@EventHandler
 	fun moneyWithdrawn(event: MoneyWithdrawn) {
-		balance = balance!!.subtract(event.amount)
+		balance = balance.subtract(event.amount)
 	}
 }

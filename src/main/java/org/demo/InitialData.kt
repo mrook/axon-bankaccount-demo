@@ -3,8 +3,9 @@ package org.demo
 import mu.KotlinLogging
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.common.IdentifierFactory
+import org.demo.domain.OpenAccount
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.context.event.ApplicationPreparedEvent
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
@@ -12,8 +13,9 @@ import org.springframework.stereotype.Component
 class InitialData @Autowired constructor(private val commandGateway: CommandGateway, private val identifierFactory: IdentifierFactory) {
 	private val log = KotlinLogging.logger {}
 
-    @EventListener(ApplicationPreparedEvent::class)
+    @EventListener(ApplicationReadyEvent::class)
     fun initialize() {
-        log.info("Application prepared, adding initial data")
+		commandGateway.sendAndWait<OpenAccount>(OpenAccount(identifierFactory.generateIdentifier(), "mooi nummer"))
+        log.info("Application started, adding initial data")
     }
 }
