@@ -9,6 +9,7 @@ import org.demo.projections.BankAccountProjectionsEvents.emptyBankAccount
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,6 +45,6 @@ class BankAccountControllerTest {
 				.perform(MockMvcRequestBuilders.get("/accounts/{accountId}", BankAccountEvents.ACCOUNT_ID))
 				.andExpect(MockMvcResultMatchers.status().isOk)
 				.andExpect(MockMvcResultMatchers.content().json("\"%s\"".formatted(BankAccountEvents.ACCOUNT_NUMBER)))
-		Mockito.verifyNoInteractions(commandGateway, identifierFactory)
+		verifyNoInteractions(commandGateway, identifierFactory)
 	}
 }
