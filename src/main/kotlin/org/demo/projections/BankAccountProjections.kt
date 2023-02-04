@@ -5,11 +5,11 @@ import org.axonframework.eventhandling.ResetHandler
 import org.demo.domain.AccountClosed
 import org.demo.domain.AccountOpened
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import java.math.BigDecimal
 import java.util.*
 
-@Component
+@Repository
 @RebuildableProjection(version = "1", rebuild = true)
 class BankAccountProjections {
 	private val logger = LoggerFactory.getLogger(BankAccountProjections::class.java)

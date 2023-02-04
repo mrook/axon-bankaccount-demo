@@ -46,7 +46,7 @@ dependencies {
 
 	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.13.+"
 
-	implementation 'org.axonframework:axon-spring-boot-starter:4.7.1'
+	implementation 'org.axonframework:axon-spring-boot-starter:4.6.1'
 	implementation "org.axonframework.extensions.kotlin:axon-kotlin:4.6.0"
 
 	implementation 'dom4j:dom4j:1.6.1'
@@ -64,7 +64,7 @@ dependencies {
 	testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.axonframework:axon-test:4.7.1'
+	testImplementation 'org.axonframework:axon-test:4.6.1'
 	testImplementation "org.axonframework.extensions.kotlin:axon-kotlin-test:4.6.0"
 
 	testRuntimeOnly 'org.apache.logging.log4j:log4j-api:2.19.0'
