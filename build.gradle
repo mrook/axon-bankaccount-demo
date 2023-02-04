@@ -5,7 +5,6 @@ buildscript {
 	}
 
 	repositories {
-		jcenter()
 		mavenCentral()
 		maven {
 			url 'https://plugins.gradle.org/m2/'
@@ -44,11 +43,10 @@ test {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.13.+"
 
-	implementation 'org.axonframework:axon-spring-boot-starter:4.6.1'
+	implementation 'org.axonframework:axon-spring-boot-starter:4.7.1'
 	implementation "org.axonframework.extensions.kotlin:axon-kotlin:4.6.0"
 
 	implementation 'dom4j:dom4j:1.6.1'
@@ -59,10 +57,6 @@ dependencies {
 
 	implementation 'io.github.microutils:kotlin-logging-jvm:3.0.2'
 
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.flywaydb:flyway-core:9.7.0'
-	runtimeOnly 'org.postgresql:postgresql:42.5.0'
-
 	runtimeOnly 'org.apache.logging.log4j:log4j-to-slf4j:2.19.0'
 
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -70,7 +64,7 @@ dependencies {
 	testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.axonframework:axon-test:4.6.1'
+	testImplementation 'org.axonframework:axon-test:4.7.1'
 	testImplementation "org.axonframework.extensions.kotlin:axon-kotlin-test:4.6.0"
 
 	testRuntimeOnly 'org.apache.logging.log4j:log4j-api:2.19.0'

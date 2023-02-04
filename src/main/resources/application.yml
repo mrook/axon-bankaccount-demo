@@ -1,5 +1,3 @@
-spring.http.converters.preferred-json-mapper: gson
-logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 axon:
   axonserver:
     enabled: false
@@ -7,14 +5,15 @@ axon:
 axon.serializer.general: jackson
 axon.serializer.events: jackson
 axon.serializer.messages: jackson
+#
+#jdbc:
+#  host: localhost
+#  port: 5432
+#  database: postgres
+#  username: postgres
+#  password: postgres1234
 
-jdbc:
-  host: localhost
-  port: 5432
-  database: postgres
-  username: postgres
-  password: postgres1234
-
-elasticsearch:
-  host: localhost
-  port: 9300
+#spring:
+#  mvc:
+#    converters:
+#      preferred-json-mapper: gson

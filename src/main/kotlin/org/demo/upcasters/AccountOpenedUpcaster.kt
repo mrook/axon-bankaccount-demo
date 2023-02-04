@@ -8,7 +8,9 @@ import org.axonframework.serialization.SimpleSerializedType
 import org.axonframework.serialization.upcasting.event.IntermediateEventRepresentation
 import org.axonframework.serialization.upcasting.event.SingleEventUpcaster
 import org.demo.domain.AccountOpened
+import org.springframework.stereotype.Component
 
+@Component
 class AccountOpenedUpcaster : SingleEventUpcaster() {
     private val typeConsumed: SerializedType = SimpleSerializedType(AccountOpened::class.java.typeName, "1.0")
     private val typeProduced: SerializedType = SimpleSerializedType(org.demo.domain.v2.AccountOpened::class.java.typeName, "2.0")
